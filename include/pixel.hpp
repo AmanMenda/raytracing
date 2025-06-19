@@ -1,3 +1,4 @@
+#pragma once
 #include <Maths/vectors.hpp>
 
 namespace Raytracing {
