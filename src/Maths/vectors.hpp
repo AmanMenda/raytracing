@@ -70,7 +70,7 @@ namespace Raytracing::Maths {
 
         Vec2 operator/(T scalar) const
         {
-			assert(scalar != 0 && "Division by zero in vector division");
+            assert(scalar != 0 && "Division by zero in vector division");
             return Vec2(x / scalar, y / scalar);
         }
 

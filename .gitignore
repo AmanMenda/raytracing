@@ -1,0 +1,5 @@
+.vs/
+CMakePresets.json
+output.ppm
+out/
+build/
