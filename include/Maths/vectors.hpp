@@ -114,7 +114,7 @@ namespace Raytracing::Maths {
         Vec2 normalize() const
         {
             T vectorLength = magnitude();
-            assert(len != 0, "Cannot normalize zero vector");
+            assert(vectorLength != 0 && "Cannot normalize zero vector");
             return *this / vectorLength;
         }
     };
@@ -138,9 +138,10 @@ namespace Raytracing::Maths {
         bool operator==(const Vec3& other) const
         {
             
-            return  Vec<T, 3>::isEqual(x, other.x) &&
-                    Vec<T, 3>::isEqual(y, other.y) &&
-                    Vec<T, 3>::isEqual(z, other.z)
+            return 
+                Vec<T, 3>::isEqual(x, other.x) &&
+                Vec<T, 3>::isEqual(y, other.y) &&
+                Vec<T, 3>::isEqual(z, other.z);
         }
 
         bool operator!=(const Vec3& other) const
@@ -211,16 +212,16 @@ namespace Raytracing::Maths {
 
         Vec3 normalize() const
         {
-            T len = magnitude();
-            assert(len != 0, "Cannot normalize zero vector");
-            return *this / len;
+            T vectorLength = magnitude();
+            assert(vectorLength != 0 && "Cannot normalize zero vector");
+            return *this / vectorLength;
         }
 
-        inline std::ostream& operator<<(std::ostream& out, const Vec3& v) {
-            return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
+        inline std::ostream& operator<<(std::ostream& out) {
+            return out << x << ' ' << y << ' ' << z;
         }
 
-        inline dotproduct(const Vec3& u, const Vec3& v) {
+        inline T dotproduct(const Vec3& u, const Vec3& v) {
             return magnitude(u) * magnitude(v);
         }
     };

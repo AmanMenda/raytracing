@@ -18,8 +18,9 @@ endif()
 
 
 # Ajouter source à l'exécutable de ce projet.
+set(SOURCES_FILES "src/main.cpp")
 
-add_executable(raytracing "src/raytracing.cpp")
-add_compile_options(-Wall -Wextra -g3 -g)
-
+add_executable(raytracing ${SOURCES_FILES})
+add_compile_options(-Wall -Wextra -g3)
+target_include_directories(raytracing PRIVATE "include")
 # TODO: Ajoutez des tests et installez des cibles si nécessaire.
