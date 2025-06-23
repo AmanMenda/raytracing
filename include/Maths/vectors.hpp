@@ -214,6 +214,11 @@ namespace Raytracing::Maths {
         {
             return std::sqrt(x*x + y*y + z*z);
         }
+        
+		inline T magnitude(const Vec3& v) const
+		{
+			return std::sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+		}
 
         Vec3<T> normalize() const
         {
@@ -226,8 +231,8 @@ namespace Raytracing::Maths {
             return out << x << ' ' << y << ' ' << z;
         }
 
-        inline T dotproduct(const Vec3& u, const Vec3& v) {
-            return magnitude(u) * magnitude(v);
+        inline T dot(const Vec3& v) {
+            return (x*v.x + y*v.y + z*v.z);
         }
     };
 }
