@@ -1,80 +1,92 @@
 #pragma once
 #include <Maths/vectors.hpp>
 
-using Raytracing::Maths;
+using namespace Raytracing::Maths;
 
 struct Image {
-	int width = 400;
-	// this ensure the image height respects the AR;
-	int height = (int(image_width / aspect_ratio) < 1)
-		? 1
-		: int(image_width / aspect_ratio)
+	double aspectRatio;
+	int width;
+	int height;
+
+	Image(int w = 400, double ar = 16.0 / 9.0)
+		: aspectRatio(ar), width(w) {
+		height = (int(width / aspectRatio) < 1) ? 1 : int(width / aspectRatio);
+	}
 };
 
 class Viewport {
 public:
 	Viewport()
 	{
+		_image = Image();
+		_height = 2.0;
+		_width = _height * (double(_image.width) / _image.height);
 		computeViewportVectors();
 	};
 
-	Viewport(int width, int height) : _width(width), _height(height)
+	Viewport(double width, double height, Image image) : _width(width), _height(height), _image(image)
 	{
 		computeViewportVectors();
+		getUpperLeftPointCoordinates();
 	}
 
-	int getWidth() const { return _width; }
-	int getHeight() const { return _height; }
-	Vec3<int> getHorizontalVector() const { return _horizontalVector; }
-	Vec3<int> getVerticalVector() const { return _verticalVector; }
+	double getWidth() const { return _width; }
+	double getHeight() const { return _height; }
+	Vec3<double> getHorizontalVector() const { return _horizontalVector; }
+	Vec3<double> getVerticalVector() const { return _verticalVector; }
+	Image getImage() const { return _image; }
 
 	inline void computeViewportVectors() {
-		_horizontalVector = Vec3<int>(_width, 0, 0);
-		_verticalVector = Vec3<int>(0, -(_height), 0); // -height, since the y-axis is inverted in the image plane
+		_horizontalVector = Vec3<double>(_width, 0, 0);
+		_verticalVector = Vec3<double>(0, -(_height), 0); // -height, since the y-axis is inverted in the image plane
 	}
 
-	inline void getUpperLeftPointCoordinates(const Camera& camera) {
-		_upperLeftPoint = camera.center - Vec3<int>(0, 0, camera.focalLength) - (_horizontalVector / 2) - (_verticalVector / 2);
+	inline Vec3<double> getUpperLeftPointCoordinates() {
+		_upperLeftPoint = Vec3<double>(0, 0, 0) -
+			Vec3<double>(0, 0, 1) - (_horizontalVector / 2) - 
+			(_verticalVector / 2);
+		return _upperLeftPoint;
 	}
 
 private:
-	double _aspectRatio = 16 / 9;
-	int _width = height * (double(originalImage.width) / originalImage.height);
-	int _height = 2.0;
+	double _width;
+	double _height;
 
-	Vec3<int> _horizontalVector;
-	Vec3<int> _verticalVector;
-	Vec3<int> _upperLeftPoint;
+	Vec3<double> _horizontalVector;
+	Vec3<double> _verticalVector;
+	Vec3<double> _upperLeftPoint;
 
-	Image originalImage = Image();
+	Image _image;
 };
 
 class Camera {
 public:
 	Camera() = default;
-	Camera(double focalLength, const Vec3<int>& center)
-		: focalLength(focalLength), center(center) {
+	Camera(double focalLength, const Vec3<double>& center)
+		: _focalLength(focalLength), _center(center) {
 	}
 
 	Camera& operator=(const Camera& other) {
-		if (*this != other) {
-			focalLength = other.focalLength;
-			center = other.center;
+		if (this != &other) {
+			_focalLength = other._focalLength;
+			_center = other._center;
 		}
 		return *this;
 	}
 	
 	// Perfect copy
 	Camera& operator=(Camera&& other) noexcept {
-		if (*this != other) {
-			focalLength = std::move(other.focalLength);
-			center = std::move(other.center);
+		if (this != &other) {
+			_focalLength = std::move(other._focalLength);
+			_center = std::move(other._center);
 		}
 		return *this;
 	};
 
+	Vec3<double> getCamCenter() const { return _center; }
+	double getFocalLength() const { return _focalLength; }
+
 private:
-	double focalLength = 1.0; // The distance from the camera to the viewport/image plane
-	Vec3<int> center = Vec3<int>(0, 0, 0);
-	Viewport viewport = Viewport();
+	double _focalLength = 1.0; // The distance from the camera to the viewport/image plane
+	Vec3<double> _center = Vec3<double>(0, 0, 0);
 };

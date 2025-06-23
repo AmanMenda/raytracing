@@ -1,28 +1,14 @@
 #pragma once
 #include <Maths/vectors.hpp>
 
-class Pixel {
-	public:
-		Pixel() : color(0.0, 0.0, 0.0) {}
+using namespace Raytracing::Maths;
 
-		Pixel(const Maths::Vec3<double>& col) : color(col) {}
+using pixel = Vec3<double>;
 
-		Pixel(float r, float g, float b) : color(r, g, b) {}
+void paint(pixel p) {
+	int rbyte = int(255.999 * p.x);
+	int gbyte = int(255.999 * p.y);
+	int bbyte = int(255.999 * p.z);
 
-		Maths::Vec3<double> getColor() const { return color; }
-
-		void setColor(const Maths::Vec3<double>& col) { color = col; }
-
-		void setColor(double r, double g, double b) { color = Maths::Vec3<double>(r, g, b); }
-
-		void paint() {
-			int rbyte = int(255.999 * color.x);
-			int gbyte = int(255.999 * color.y);
-			int bbyte = int(255.999 * color.z);
-
-			std::cout << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
-		}
-
-	private:
-		Maths::Vec3<double> color;
-};
+	std::cout << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
+}

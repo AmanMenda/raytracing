@@ -146,7 +146,7 @@ namespace Raytracing::Maths {
 
         bool operator!=(const Vec3& other) const
         {
-            return *this == other;
+            return *this != other;
         }
 
         inline Vec3 operator+(const Vec3& other) const
@@ -168,6 +168,11 @@ namespace Raytracing::Maths {
         {
             return Vec3(x / scalar, y / scalar, z / scalar);
         }
+
+		inline Vec3 operator*(const Vec3& other) const
+		{
+			return Vec3(x * other.x, y * other.y, z * other.z);
+		}
 
         inline Vec3& operator+=(const Vec3& other)
         {
@@ -210,7 +215,7 @@ namespace Raytracing::Maths {
             return std::sqrt(x*x + y*y + z*z);
         }
 
-        Vec3 normalize() const
+        Vec3<T> normalize() const
         {
             T vectorLength = magnitude();
             assert(vectorLength != 0 && "Cannot normalize zero vector");
